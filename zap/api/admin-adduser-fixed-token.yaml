@@ -1,24 +1,23 @@
 openapi: 3.0.3
 info:
-  title: TestFire - Admin AddUser (Fixed Token)
+  title: TestFire - Admin AddUser
   version: 1.0.0
 servers:
   - url: https://demo.testfire.net
 
-# This format is 100% supported by the action
+# This format is 100% reliable with the action
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT   # doesn't matter what we write here
 security:
-  - bearerAuth: YW5OdGFYUm86WkdWdGJ6RXlNelE9Oj9lPz8/P2c=   # ← your exact token
+  - bearerAuth: YW5OdGFYUm86WkdWdGJ6RXlNelE9Oj9lPz8/P2c=
 
 paths:
   /api/admin/addUser:
     post:
-      summary: Admin Add User – Fixed Token
+      summary: Add User (Admin)
       operationId: addUser
       requestBody:
         required: true
@@ -39,4 +38,4 @@ paths:
                 password1: { type: string }
                 password2: { type: string }
       responses:
-        '200': { description: OK }
+        '200': { description: Success }

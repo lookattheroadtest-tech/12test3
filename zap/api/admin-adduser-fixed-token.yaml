@@ -5,19 +5,20 @@ info:
 servers:
   - url: https://demo.testfire.net
 
+# This format is 100% supported by the action
 components:
   securitySchemes:
-    fixedToken:
-      type: apiKey
-      in: header
-      name: Authorization
-  security:
-    - fixedToken: YW5OdGFYUm86WkdWdGJ6RXlNelE9Oj9lPz8/P2c=
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT   # doesn't matter what we write here
+security:
+  - bearerAuth: YW5OdGFYUm86WkdWdGJ6RXlNelE9Oj9lPz8/P2c=   # ← your exact token
 
 paths:
   /api/admin/addUser:
     post:
-      summary: Add User (Admin) - Fixed Token
+      summary: Admin Add User – Fixed Token
       operationId: addUser
       requestBody:
         required: true
@@ -32,16 +33,10 @@ paths:
                 - password1
                 - password2
               properties:
-                firstname:
-                  type: string
-                lastname:
-                  type: string
-                username:
-                  type: string
-                password1:
-                  type: string
-                password2:
-                  type: string
+                firstname: { type: string }
+                lastname:  { type: string }
+                username:  { type: string }
+                password1: { type: string }
+                password2: { type: string }
       responses:
-        '200':
-          description: Success
+        '200': { description: OK }

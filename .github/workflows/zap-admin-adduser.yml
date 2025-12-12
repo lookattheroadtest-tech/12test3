@@ -8,30 +8,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Run ZAP API Scan
-      uses: zaproxy/action-api-scan@v0.10.0
-      with:
-        target: /zap/wrk/zap/api/admin-adduser-fixed-token.yaml
-        format: openapi
-        cmd_options: >
-          -J report_json.json
-          -w report_md.md
-          -r report_html.html
-          -a
-          -config scanner.attackOnStart=true
-          -config view.mode=attack
-          -config connection.timeoutInSecs=180
-          -config rules.commonheaders.ignorelist=10035,10036,10038,10054,10063,100001
-          -config api.failOnError=false
+      - name: ZAP API Scan
+        uses: zaproxy/action-api-scan@v0.10.0
+        with:
+          target: ""
+          openapi: ""
+          args: >
+            -t /zap/wrk/zap/api/admin-adduser-fixed-token.yaml
+            -f openapi
+            -J report_json.json
+            -w report_md.md
+            -r report_html.html
+            -a
+            -config scanner.attackOnStart=true
+            -config view.mode=attack
+            -config connection.timeoutInSecs=180
+            -config rules.commonheaders.ignorelist=10035,10036,10038,10054,10063,100001
+            -config api.failOnError=false
 
-    - name: Upload Reports
-      uses: actions/upload-artifact@v4
-      with:
-        name: zap-reports
-        path: |
-          report_md.md
-          report_html.html
-          report_json.json
+      - name: Upload Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-reports
+          path: |
+            report_json.json
+            report_md.md
+            report_html.html

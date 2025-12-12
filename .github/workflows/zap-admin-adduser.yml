@@ -1,0 +1,44 @@
+name: ZAP DAST - Admin AddUser (Fixed Token)
+
+on:
+  push:
+    paths:
+      - 'zap/api/admin-adduser-fixed-token.yaml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'  # optional: run daily at 3 AM UTC
+
+jobs:
+  zap-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # optional: for future SARIF upload
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ZAP API Scan - Fixed Token (No Login)
+        uses: zaproxy/action-api-scan@v0.10.0
+        with:
+          format: openapi
+          target: zap/api/admin-adduser-fixed-token.yaml
+          allow_issue_writing: false
+          artifact_name: zap-admin-adduser-report
+          cmd_options: >-
+            -a
+            -config scanner.attackOnStart=true
+            -config view.mode=attack
+            -config connection.timeoutInSecs=180
+            -config rules.commonheaders.ignorelist=10035,10036,10038,10054,10063,100001
+            -config api.failOnError=false
+
+      - name: Upload ZAP Report (HTML + JSON)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-admin-adduser-report
+          path: |
+            report_html.html
+            report_json.json
+          retention-days: 30

@@ -1,0 +1,50 @@
+openapi: 3.0.3
+info:
+  title: TestFire - Admin AddUser (Fixed Hard-Coded Token)
+  version: 1.0.0
+servers:
+  - url: https://demo.testfire.net
+
+# ←←← THIS IS THE KEY PART ←←←
+# Forces ZAP to add this header to EVERY request to this API
+components:
+  securitySchemes:
+    fixedAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Fixed token – always sent
+  security:
+    - fixedAuth: "YW5OdGFYUm86WkdWdGJ6RXlNelE9Oj9lPz8/P2c="   # ← your token here
+
+paths:
+  /api/admin/addUser:
+    post:
+      summary: Admin - Add User (fixed token)
+      operationId: addUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstname
+                - lastname
+                - username
+                - password1
+                - password2
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                username:
+                  type: string
+                password1:
+                  type: string
+                password2:
+                  type: string
+      responses:
+        '200':
+          description: OK
